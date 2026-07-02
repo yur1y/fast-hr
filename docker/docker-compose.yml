@@ -1,0 +1,88 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://tracepilot:tracepilot@db:5432/tracepilot
+      - REDIS_URL=redis://redis:6379/0
+      - LLM_PROVIDER=openai
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
+      - OBSERVABILITY_PROVIDER=${OBSERVABILITY_PROVIDER:-langfuse}
+      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY}
+      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY}
+      - LANGFUSE_HOST=http://langfuse:3000
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      langfuse:
+        condition: service_healthy
+    volumes:
+      - ../app:/app/app:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      retries: 5
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: tracepilot
+      POSTGRES_PASSWORD: tracepilot
+      POSTGRES_DB: tracepilot
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tracepilot"]
+      interval: 10s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 5
+
+  langfuse:
+    image: langfuse/langfuse:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://tracepilot:tracepilot@db:5432/tracepilot
+      - NEXTAUTH_SECRET=${LANGFUSE_NEXTAUTH_SECRET:-local-secret-change-in-production}
+      - SALT=${LANGFUSE_SALT:-local-salt-change-in-production}
+      - ENCRYPTION_KEY=${LANGFUSE_ENCRYPTION_KEY:-local-encryption-change-in-production}
+      - TELEMETRY_ENABLED=false
+      - LANGFUSE_INIT_ORG_NAME=TracePilot
+      - LANGFUSE_INIT_PROJECT_NAME=tracepilot
+      - LANGFUSE_INIT_USER_EMAIL=admin@tracepilot.local
+      - LANGFUSE_INIT_USER_NAME=Admin
+      - LANGFUSE_INIT_USER_PASSWORD=${LANGFUSE_INIT_PASSWORD:-admin123}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/public/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  postgres_data:
+  redis_data:
