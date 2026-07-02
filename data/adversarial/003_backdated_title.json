@@ -1,0 +1,8 @@
+{
+  "id": "adv_003",
+  "lie_type": "backdated_title",
+  "resume_text": "Alice Williams\nEngineering Manager\n\nExperience:\n- Engineering Manager at BigTech (2019 - Present)\n- Senior Developer at BigTech (2017 - 2019)\n\nLed team of 15 engineers since 2019",
+  "lie_description": "Claims Engineering Manager title from 2019 but was Senior Developer until 2019",
+  "job_description": "Looking for a software engineer with relevant experience.",
+  "expected_detection": true
+}

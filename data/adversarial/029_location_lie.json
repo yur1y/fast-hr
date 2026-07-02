@@ -1,0 +1,8 @@
+{
+  "id": "adv_029",
+  "lie_type": "location_lie",
+  "resume_text": "Diana Prince\nRemote Software Engineer\n\nExperience:\n- On-site Senior Engineer at LocalCorp, San Francisco (2020 - 2022)\n- Remote Consultant for GlobalTech (2022 - Present)\n\nLocation: San Francisco, CA (willing to relocate)\n\nSkills: Java, Spring Boot, AWS",
+  "lie_description": "Claims remote work experience but all positions listed are on-site or location-specific",
+  "job_description": "Looking for a software engineer with relevant experience.",
+  "expected_detection": true
+}

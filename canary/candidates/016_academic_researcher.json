@@ -1,0 +1,6 @@
+{
+  "id": "016",
+  "name": "Academic Researcher",
+  "resume_text": "Postdoctoral researcher in machine learning with 15 published papers. Expert in PyTorch, JAX, and distributed training. Implemented novel architectures for computer vision. Limited production engineering experience.",
+  "job_description": "Looking for an ML engineer to productionize models and maintain ML infrastructure. MLOps and software engineering skills required."
+}

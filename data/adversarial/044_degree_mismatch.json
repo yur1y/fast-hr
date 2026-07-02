@@ -1,0 +1,8 @@
+{
+  "id": "adv_044",
+  "lie_type": "degree_mismatch",
+  "resume_text": "Charlie Brown\nBackend Developer\n\nEducation:\n- PhD in Computer Science from MIT (2018)\n- MS in Software Engineering from Stanford (2015)\n\nExperience:\n- Backend Developer at various startups (2018 - Present)",
+  "lie_description": "Claims PhD from MIT but works as a backend developer with no research publications",
+  "job_description": "Looking for a software engineer with relevant experience.",
+  "expected_detection": true
+}

@@ -1,0 +1,8 @@
+{
+  "id": "adv_024",
+  "lie_type": "date_overlap",
+  "resume_text": "John Doe\nSoftware Engineer\n\nExperience:\n- Senior Developer at TechCorp (Jan 2022 - Dec 2023)\n- Lead Developer at StartupXYZ (Jun 2023 - Present)\n\nSkills: Python, FastAPI, PostgreSQL",
+  "lie_description": "Overlapping employment dates (Jun 2023 - Dec 2023 overlap)",
+  "job_description": "Looking for a software engineer with relevant experience.",
+  "expected_detection": true
+}

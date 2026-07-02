@@ -1,0 +1,122 @@
+{
+  "001": {
+    "id": "001",
+    "name": "Simple Junior Dev",
+    "fit_score": 0.75,
+    "confidence": 0.85
+  },
+  "002": {
+    "id": "002",
+    "name": "Senior With Gaps",
+    "fit_score": 0.65,
+    "confidence": 0.8
+  },
+  "003": {
+    "id": "003",
+    "name": "Career Switcher",
+    "fit_score": 0.55,
+    "confidence": 0.7
+  },
+  "004": {
+    "id": "004",
+    "name": "Overqualified Candidate",
+    "fit_score": 0.45,
+    "confidence": 0.9
+  },
+  "005": {
+    "id": "005",
+    "name": "Non-Technical PM",
+    "fit_score": 0.3,
+    "confidence": 0.85
+  },
+  "006": {
+    "id": "006",
+    "name": "Full Stack Generalist",
+    "fit_score": 0.8,
+    "confidence": 0.85
+  },
+  "007": {
+    "id": "007",
+    "name": "DevOps Specialist",
+    "fit_score": 0.5,
+    "confidence": 0.8
+  },
+  "008": {
+    "id": "008",
+    "name": "Fresh Graduate",
+    "fit_score": 0.7,
+    "confidence": 0.75
+  },
+  "009": {
+    "id": "009",
+    "name": "Remote Worker",
+    "fit_score": 0.6,
+    "confidence": 0.8
+  },
+  "010": {
+    "id": "010",
+    "name": "Domain Expert",
+    "fit_score": 0.4,
+    "confidence": 0.85
+  },
+  "011": {
+    "id": "011",
+    "name": "Self-Taught Developer",
+    "fit_score": 0.65,
+    "confidence": 0.75
+  },
+  "012": {
+    "id": "012",
+    "name": "Management Track",
+    "fit_score": 0.35,
+    "confidence": 0.8
+  },
+  "013": {
+    "id": "013",
+    "name": "Short Tenure",
+    "fit_score": 0.55,
+    "confidence": 0.7
+  },
+  "014": {
+    "id": "014",
+    "name": "Niche Specialist",
+    "fit_score": 0.25,
+    "confidence": 0.85
+  },
+  "015": {
+    "id": "015",
+    "name": "Startup Veteran",
+    "fit_score": 0.7,
+    "confidence": 0.8
+  },
+  "016": {
+    "id": "016",
+    "name": "Academic Researcher",
+    "fit_score": 0.5,
+    "confidence": 0.75
+  },
+  "017": {
+    "id": "017",
+    "name": "Contractor",
+    "fit_score": 0.6,
+    "confidence": 0.75
+  },
+  "018": {
+    "id": "018",
+    "name": "Legacy Systems",
+    "fit_score": 0.35,
+    "confidence": 0.8
+  },
+  "019": {
+    "id": "019",
+    "name": "Adversarial - Date Overlap",
+    "fit_score": 0.5,
+    "confidence": 0.6
+  },
+  "020": {
+    "id": "020",
+    "name": "Adversarial - Phantom Company",
+    "fit_score": 0.5,
+    "confidence": 0.55
+  }
+}

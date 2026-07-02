@@ -1,0 +1,8 @@
+{
+  "id": "adv_022",
+  "lie_type": "salary_inflation",
+  "resume_text": "Evan Wright\nSenior Developer\n\nExperience:\n- Senior Developer at MidSizeCorp (2021 - 2024)\n- Previous salary: 50,000/year\n\nSkills: Python, Django, PostgreSQL\n\nNote: Expecting 00,000+ for next role",
+  "lie_description": "Claims 50k salary at MidSizeCorp where market rate is 20-150k for this role",
+  "job_description": "Looking for a software engineer with relevant experience.",
+  "expected_detection": true
+}
