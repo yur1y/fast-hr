@@ -1,0 +1,24 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+env/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+*.db
+.git/
+# IDE / cache
+.idea/
+.vscode/
+
+# Node (if frontend added)
+node_modules/
+
+# Project-specific (keep plans local)
+PLAN.md
