@@ -1,8 +1,0 @@
-{
-  "id": "adv_049",
-  "lie_type": "skill_inflation",
-  "resume_text": "Jane Smith\nData Scientist\n\nExperience:\n- Data Analyst at DataCorp (2022 - 2024)\n\nSkills: Python (expert), Machine Learning (expert), Deep Learning (expert), TensorFlow (expert), PyTorch (expert)\n\nProjects: Completed a 2-week online course on ML fundamentals",
-  "lie_description": "Claims expertise in multiple advanced skills after only a 2-week course",
-  "job_description": "Looking for a software engineer with relevant experience.",
-  "expected_detection": true
-}

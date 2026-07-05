@@ -60,7 +60,9 @@ def run_fuzzer_task(lie_types: list[str], count: int) -> dict:
     except RuntimeError as exc:
         if "cannot be called from a running event loop" in str(exc):
             loop = asyncio.get_event_loop()
-            result = loop.run_until_complete(engine.run(lie_types=lie_types, count=count))
+            result = loop.run_until_complete(
+                engine.run(lie_types=lie_types, count=count)
+            )
         else:
             raise
     return result.model_dump()
@@ -105,9 +107,19 @@ def screen_application_task(application_id: str) -> dict:
 
     logger = logging.getLogger(__name__)
 
+    from app.api.deps import normalize_db_url
+
     async def _run():
-        engine = create_async_engine(settings.database_url)
-        session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+        db_url, connect_args = normalize_db_url(settings.database_url)
+        engine_kwargs = dict(
+            url=db_url,
+        )
+        if connect_args:
+            engine_kwargs["connect_args"] = connect_args
+        engine = create_async_engine(**engine_kwargs)
+        session_maker = async_sessionmaker(
+            engine, class_=AsyncSession, expire_on_commit=False
+        )
         try:
             async with session_maker() as session:
                 app_repo = ApplicationRepository(session)

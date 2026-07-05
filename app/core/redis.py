@@ -5,8 +5,8 @@ import logging
 import time
 
 from redis.asyncio import Redis
-from redis.exceptions import RedisError
 
+from app.api.deps import _mask_url as _mask_url_password
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -44,7 +44,10 @@ async def _ensure_redis_connection() -> None:
             await _redis.ping()
             _redis_available = True
             _last_check = time.time()
-            logger.info("redis_connection_ok url=%s", settings.redis_url)
+            logger.info(
+                "redis_connection_ok url=%s",
+                _mask_url_password(settings.redis_url),
+            )
         except Exception as exc:
             logger.warning("redis_connection_failed: %s", exc)
             _redis_available = False

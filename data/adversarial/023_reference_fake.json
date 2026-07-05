@@ -1,8 +1,0 @@
-{
-  "id": "adv_023",
-  "lie_type": "reference_fake",
-  "resume_text": "Fiona Gallagher\nFrontend Developer\n\nReferences:\n- John Smith, CTO at TechCorp, john.smith@techcorp.com\n- Jane Doe, VP Engineering at StartupXYZ, jane.doe@startupxyz.com\n- Bob Wilson, Engineering Manager at BigTech, bob.wilson@bigtech.com\n\nExperience:\n- Frontend Developer at WebAgency (2022 - Present)",
-  "lie_description": "References provided do not exist or are not verifiable",
-  "job_description": "Looking for a software engineer with relevant experience.",
-  "expected_detection": true
-}

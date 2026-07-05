@@ -1,8 +1,0 @@
-{
-  "id": "adv_050",
-  "lie_type": "phantom_company",
-  "resume_text": "Bob Johnson\nFull Stack Developer\n\nExperience:\n- Senior Engineer at QuantumSoft Solutions (2021 - 2023)\n- Tech Lead at NexGen Innovations LLC (2023 - Present)\n\nSkills: React, Node.js, MongoDB\n\nEducation: BS Computer Science, State University",
-  "lie_description": "Companies QuantumSoft Solutions and NexGen Innovations LLC do not exist",
-  "job_description": "Looking for a software engineer with relevant experience.",
-  "expected_detection": true
-}

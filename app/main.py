@@ -69,7 +69,10 @@ def create_app() -> FastAPI:
     async def serve_react(full_path: str):
         if full_path.startswith(("api/", "health", "assets/")):
             return {"detail": "Not found"}
-        return FileResponse(str(FRONTEND_DIST / "index.html"))
+        index_path = FRONTEND_DIST / "index.html"
+        if not index_path.exists():
+            return {"detail": "Frontend not built"}
+        return FileResponse(str(index_path))
 
     return app
 
