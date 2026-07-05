@@ -38,5 +38,11 @@ class LangsmithClient:
             comment=kwargs.get("comment", ""),
         )
 
+    def create_dataset(self, name: str, **kwargs: Any):
+        return None
+
+    def create_dataset_item(self, **kwargs: Any):
+        return None
+
     def flush(self) -> None:
         return None

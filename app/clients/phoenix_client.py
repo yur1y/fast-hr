@@ -31,14 +31,20 @@ class PhoenixClient:
         )
 
     def span(self, parent: Any, name: str, **kwargs: Any):
-        with self.tracer.start_span(name=name, parent=parent) as span:
-            span.set_attributes(kwargs.get("input", {}))
-            return span
+        span = self.tracer.start_span(name=name, parent=parent)
+        span.set_attributes(kwargs.get("input", {}))
+        return span
 
     def score_trace(self, trace_id: str, name: str, value: float, **kwargs: Any):
         spans = list(self.tracer.get_trace(trace_id))
         if spans:
             spans[0].set_attributes({"score_name": name, "score_value": value})
+
+    def create_dataset(self, name: str, **kwargs: Any):
+        return None
+
+    def create_dataset_item(self, **kwargs: Any):
+        return None
 
     def flush(self) -> None:
         return None

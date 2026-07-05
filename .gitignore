@@ -22,3 +22,13 @@ node_modules/
 
 # Project-specific (keep plans local)
 PLAN.md
+
+# TypeScript/Vite build artifacts
+frontend/tsconfig.tsbuildinfo
+
+# Local dev scripts with hardcoded paths
+scripts/start_postgres.sh
+
+# Python type/check cache
+.mypy_cache/
+.ruff_cache/

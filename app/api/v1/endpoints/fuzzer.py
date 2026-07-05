@@ -7,6 +7,7 @@ from app.clients.observability_factory import observability
 from app.config import settings
 from app.schemas.fuzzer import FuzzerRunRequest, FuzzerRunResponse
 from app.services.fuzzer import FuzzerEngine
+from app.tasks.celery import run_fuzzer_task, submit_task
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +45,33 @@ async def run_fuzzer(request: FuzzerRunRequest):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Fuzzer run failed.",
+        ) from exc
+
+
+@router.post("/run-async", status_code=status.HTTP_202_ACCEPTED)
+async def run_fuzzer_async(request: FuzzerRunRequest):
+    """Queue a fuzzer run as a background Celery task."""
+    try:
+        task = submit_task(
+            "app.tasks.celery.run_fuzzer_task",
+            args=[
+                [lt.value for lt in request.lie_types],
+                request.count,
+            ],
+            fallback=lambda *a, **kw: run_fuzzer_task(*a, **kw),
+        )
+        logger.info("fuzzer_task_queued task_id=%s", task.id)
+        return {
+            "task_id": task.id,
+            "status": "queued",
+            "lie_types": [lt.value for lt in request.lie_types],
+            "count": request.count,
+        }
+    except Exception as exc:
+        logger.exception("fuzzer_async_queue_failed")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Failed to queue fuzzer task. Celery may not be available.",
         ) from exc
 
 

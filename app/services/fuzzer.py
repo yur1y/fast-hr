@@ -125,12 +125,11 @@ class FuzzerEngine:
 
         # Create dataset for this run
         try:
-            if hasattr(observability, "client"):
-                observability.client.create_dataset(
-                    name=dataset_id,
-                    description=f"Fuzzer run {run_id} - adversarial resume corpus",
-                    metadata={"run_id": run_id, "lie_types": lie_types, "count": count},
-                )
+            observability.create_dataset(
+                name=dataset_id,
+                description=f"Fuzzer run {run_id} - adversarial resume corpus",
+                metadata={"run_id": run_id, "lie_types": lie_types, "count": count},
+            )
         except Exception as e:
             logger.warning("failed_to_create_fuzzer_dataset: %s", str(e))
 
@@ -240,25 +239,24 @@ class FuzzerEngine:
 
                 # Add to dataset
                 try:
-                    if hasattr(observability, "client"):
-                        observability.client.create_dataset_item(
-                            dataset_name=dataset_id,
-                            input={
-                                "resume_text": resume_text,
-                                "lie_type": lie_type,
-                                "lie_description": lie_description,
-                            },
-                            expected_output={
-                                "should_detect": True,
-                                "lie_description": lie_description,
-                            },
-                            metadata={
-                                "detected": detected,
-                                "confidence": result.confidence,
-                                "fit_score": result.fit_score,
-                                "risks": result.risks,
-                            },
-                        )
+                    observability.create_dataset_item(
+                        dataset_name=dataset_id,
+                        input={
+                            "resume_text": resume_text,
+                            "lie_type": lie_type,
+                            "lie_description": lie_description,
+                        },
+                        expected_output={
+                            "should_detect": True,
+                            "lie_description": lie_description,
+                        },
+                        metadata={
+                            "detected": detected,
+                            "confidence": result.confidence,
+                            "fit_score": result.fit_score,
+                            "risks": result.risks,
+                        },
+                    )
                 except Exception as e:
                     logger.warning("failed_to_create_fuzzer_dataset_item: %s", str(e))
 

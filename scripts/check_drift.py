@@ -5,8 +5,8 @@ import sys
 
 
 def main():
-    threshold = float(os.environ.get("CANARY_THRESHOLD", 0.15))
-    log_path = os.environ.get("CANARY_LOG", "canary_output.json")
+    threshold = float(os.environ.get("TP_CANARY_THRESHOLD", os.environ.get("CANARY_THRESHOLD", "0.15")))
+    log_path = os.environ.get("TP_CANARY_LOG", os.environ.get("CANARY_LOG", "canary_output.json"))
 
     if not os.path.exists(log_path):
         print("No canary log found")

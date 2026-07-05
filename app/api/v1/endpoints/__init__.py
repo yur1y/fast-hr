@@ -1,3 +1,3 @@
-from app.api.v1.endpoints import fuzzer, health, screenings
+from app.api.v1.endpoints import admin, careers, fuzzer, health, hr, screenings, tasks
 
-__all__ = ["fuzzer", "health", "screenings"]
+__all__ = ["admin", "careers", "fuzzer", "health", "hr", "screenings", "tasks"]

@@ -1,5 +1,6 @@
 import logging
 
+from app.clients.noop_client import NoopClient
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -22,11 +23,13 @@ class ObservabilityClientFactory:
 
             return PhoenixClient()
         elif provider == "none":
-            from app.clients.noop_client import NoopClient
-
             return NoopClient()
         else:
             raise ValueError(f"Unknown observability provider: {provider}")
 
 
-observability = ObservabilityClientFactory.create()
+try:
+    observability = ObservabilityClientFactory.create()
+except Exception as exc:
+    logger.error("Observability client failed to initialize: %s", exc)
+    observability = NoopClient()

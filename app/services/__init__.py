@@ -1,3 +1,3 @@
-from app.services import fuzzer, screening
+from app.services import email, resume_parser
 
-__all__ = ["fuzzer", "screening"]
+__all__ = ["email", "resume_parser"]

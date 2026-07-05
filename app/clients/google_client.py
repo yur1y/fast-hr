@@ -20,7 +20,18 @@ class GoogleClient:
         response_format: dict[str, str] | None = None,
         temperature: float | None = None,
     ) -> str:
-        parts = [m["content"] for m in messages]
+        system_instruction = ""
+        parts: list[str] = []
+        for m in messages:
+            role = m.get("role", "")
+            content = m.get("content", "") or ""
+            if role == "system":
+                system_instruction += content + "\n"
+            else:
+                parts.append(content)
+
+        if system_instruction:
+            parts.insert(0, system_instruction.strip())
 
         if response_format is not None:
             parts[0] = (parts[0] or "") + "\n\nReturn ONLY valid JSON."

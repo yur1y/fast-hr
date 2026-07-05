@@ -40,10 +40,10 @@ def load_thresholds(path: str):
 async def main():
     logger.info("canary_run_started")
 
-    dir_path = os.environ.get("CANARY_CANDIDATES_DIR", "canary/candidates")
+    dir_path = os.environ.get("TP_CANARY_CANDIDATES_DIR", os.environ.get("CANARY_CANDIDATES_DIR", "canary/candidates"))
     baseline_path = os.path.join(os.path.dirname(dir_path), "baseline_scores.json")
     thresholds_path = os.path.join(os.path.dirname(dir_path), "thresholds.json")
-    output_path = os.environ.get("CANARY_LOG", "canary_output.json")
+    output_path = os.environ.get("TP_CANARY_LOG", os.environ.get("CANARY_LOG", "canary_output.json"))
 
     candidates = load_benchmark_candidates(dir_path)
     baseline = load_baseline(baseline_path)

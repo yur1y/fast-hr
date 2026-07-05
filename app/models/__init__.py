@@ -1,3 +1,3 @@
 from app.models import fuzzer, screening
 
-__all__ = ["screening", "fuzzer"]
+__all__ = ["Base", "screening", "fuzzer"]

@@ -72,15 +72,15 @@ def parse_json_response(raw: str) -> dict[str, Any]:
         raise ValueError(f"Failed to parse LLM response: {exc}") from exc
 
 
-async def screen_candidate(resume_text: str, job_description: str) -> ScreeningResult:
+async def screen_candidate(resume_text: str, job_description: str, temperature: float | None = None) -> ScreeningResult:
     start = time.perf_counter()
 
-    temperatures = [
-        settings.openai_temperature,
+    temps = [
+        temperature if temperature is not None else settings.openai_temperature,
         0.0,
     ]
 
-    for i, temp in enumerate(temperatures):
+    for i, temp in enumerate(temps):
         try:
             messages = build_messages(resume_text, job_description)
             response_format = None
@@ -94,7 +94,7 @@ async def screen_candidate(resume_text: str, job_description: str) -> ScreeningR
             data = parse_json_response(raw)
             result = ScreeningResult(**data)
             latency_ms = int((time.perf_counter() - start) * 1000)
-            logger.warning(
+            logger.info(
                 "screening_success attempt=%s latency_ms=%s", i + 1, latency_ms
             )
             return result
@@ -102,10 +102,10 @@ async def screen_candidate(resume_text: str, job_description: str) -> ScreeningR
             logger.warning(
                 "screening_attempt_failed attempt=%s error=%s", i + 1, str(exc)
             )
-            if i == len(temperatures) - 1:
+            if i == len(temps) - 1:
                 break
 
-    # Deterministic fallback: temperature=0 with explicit low-confidence template
+    # Deterministic fallback
     try:
         logger.warning("screening_fallback_to_deterministic_template")
         messages = build_messages(resume_text, job_description, fallback=True)
@@ -126,7 +126,7 @@ async def screen_candidate(resume_text: str, job_description: str) -> ScreeningR
         return result
     except Exception as exc:
         logger.error("screening_all_attempts_failed error=%s", str(exc))
-        raise RuntimeError(f"All screening attempts failed, including deterministic fallback: {exc}") from exc
+        raise RuntimeError(f"All screening attempts failed: {exc}") from exc
 
 
 async def run_screening(
@@ -134,9 +134,9 @@ async def run_screening(
 ) -> ScreeningResponse:
     start_time = time.perf_counter()
 
-    # Create trace (root span)
+    # Create trace
     trace = observability.trace(name="screening")
-    trace_id = trace.id if hasattr(trace, "id") else str(id(trace))
+    trace_id = getattr(trace, "trace_id", trace.id if hasattr(trace, "id") else str(id(trace)))
 
     # Span: input_parsing
     input_span = observability.span(
@@ -232,3 +232,5 @@ async def run_screening(
         llm_span.update(metadata={"error": str(exc)})
         llm_span.end()
         raise
+    finally:
+        observability.flush()

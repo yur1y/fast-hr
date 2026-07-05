@@ -6,8 +6,8 @@ import json
 def main():
     from app.clients.observability_factory import observability
 
-    dataset_name = os.environ.get("LANGFUSE_DATASET", "adversarial-tests")
-    output_path = os.environ.get("OUTPUT_PATH", "data/adversarial/dataset_export.json")
+    dataset_name = os.environ.get("TP_LANGFUSE_DATASET", os.environ.get("LANGFUSE_DATASET", "adversarial-tests"))
+    output_path = os.environ.get("TP_OUTPUT_PATH", os.environ.get("OUTPUT_PATH", "data/adversarial/dataset_export.json"))
 
     try:
         if hasattr(observability, "client"):

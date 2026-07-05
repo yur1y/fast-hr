@@ -7,8 +7,8 @@ async def main():
     from app.services.fuzzer import FuzzerEngine
 
     engine = FuzzerEngine()
-    lie_types = os.environ.get("FUZZER_LIE_TYPES", "date_overlap,skill_inflation")
-    count = int(os.environ.get("FUZZER_COUNT", "10"))
+    lie_types = os.environ.get("TP_FUZZER_LIE_TYPES", os.environ.get("FUZZER_LIE_TYPES", "date_overlap,skill_inflation"))
+    count = int(os.environ.get("TP_FUZZER_COUNT", os.environ.get("FUZZER_COUNT", "10")))
 
     lie_types_list = [t.strip() for t in lie_types.split(",")]
     result = await engine.run(lie_types=lie_types_list, count=count)

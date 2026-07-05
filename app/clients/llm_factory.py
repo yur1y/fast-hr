@@ -1,5 +1,6 @@
 import logging
 
+from app.clients.noop_client import NoopLLMClient
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -9,7 +10,16 @@ class LLMClient:
     @staticmethod
     def create():
         provider = settings.llm_provider
-        if provider == "openai" or provider == "openai_compatible":
+        if provider in (
+            "openai",
+            "openai_compatible",
+            "ollama",
+            "groq",
+            "together",
+            "vllm",
+            "litellm",
+            "grok",
+        ):
             from app.clients.openai_client import OpenAIClient
 
             return OpenAIClient()
@@ -25,4 +35,8 @@ class LLMClient:
             raise ValueError(f"Unknown LLM provider: {provider}")
 
 
-llm_client = LLMClient.create()
+try:
+    llm_client = LLMClient.create()
+except Exception as exc:
+    logger.error("LLM client failed to initialize: %s", exc)
+    llm_client = NoopLLMClient()

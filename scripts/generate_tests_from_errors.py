@@ -4,8 +4,8 @@ import os
 
 
 def main():
-    input_path = os.environ.get("INPUT_PATH", "data/adversarial/dataset_export.json")
-    output_path = os.environ.get("OUTPUT_PATH", "tests/generated/test_adversarial_errors.py")
+    input_path = os.environ.get("TP_INPUT_PATH", os.environ.get("INPUT_PATH", "data/adversarial/dataset_export.json"))
+    output_path = os.environ.get("TP_OUTPUT_PATH", os.environ.get("OUTPUT_PATH", "tests/generated/test_adversarial_errors.py"))
 
     if not os.path.exists(input_path):
         print(f"Input file not found: {input_path}")

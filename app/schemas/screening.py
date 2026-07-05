@@ -1,4 +1,7 @@
-from pydantic import BaseModel, Field, field_validator
+from datetime import datetime
+import json
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ScreeningRequest(BaseModel):
@@ -20,7 +23,21 @@ class ScreeningResult(BaseModel):
         return round(v, 2)
 
 
+def _parse_json_list(value: object) -> list[str]:
+    if isinstance(value, list):
+        return value
+    if isinstance(value, str):
+        try:
+            parsed = json.loads(value)
+            return parsed if isinstance(parsed, list) else []
+        except (json.JSONDecodeError, TypeError):
+            return []
+    return []
+
+
 class ScreeningResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     candidate_summary: str
     fit_score: float
@@ -29,4 +46,13 @@ class ScreeningResponse(BaseModel):
     follow_up_questions: list[str]
     confidence: float
     trace_id: str | None = None
-    processing_time_ms: int
+    processing_time_ms: int | None = None
+    resume_text: str | None = None
+    job_description: str | None = None
+    created_at: datetime | None = None
+
+    @field_validator("strengths", "risks", "follow_up_questions", mode="before")
+    @classmethod
+    def parse_json_list_fields(cls, value: object) -> list[str]:
+        return _parse_json_list(value)
+

@@ -14,6 +14,12 @@ class NoopClient:
     def score_trace(self, trace_id: str, name: str, value: float, **kwargs: Any):
         return None
 
+    def create_dataset(self, name: str, **kwargs: Any):
+        return None
+
+    def create_dataset_item(self, **kwargs: Any):
+        return None
+
     def flush(self) -> None:
         return None
 
@@ -24,3 +30,13 @@ class _NoopSpan:
 
     def end(self) -> None:
         return None
+
+
+class NoopLLMClient:
+    async def chat(
+        self,
+        messages: list[dict[str, str]],
+        response_format: dict[str, str] | None = None,
+        temperature: float | None = None,
+    ) -> str:
+        return '{"candidate_summary":"N/A","fit_score":0.5,"strengths":[],"risks":[],"follow_up_questions":[],"confidence":0.5}'
