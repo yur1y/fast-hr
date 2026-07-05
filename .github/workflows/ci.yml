@@ -62,11 +62,11 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: pytest --cov=app --cov-report=xml
         env:
-          DATABASE_URL: postgresql+asyncpg://tracepilot:tracepilot@localhost:5432/tracepilot
-          REDIS_URL: redis://localhost:6379/0
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
-          LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+          TP_DATABASE_URL: postgresql+asyncpg://tracepilot:tracepilot@localhost:5432/tracepilot
+          TP_REDIS_URL: redis://localhost:6379/0
+          TP_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          TP_LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+          TP_LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
       - uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
