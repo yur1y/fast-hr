@@ -8,12 +8,12 @@
 
 ### 1. API Keys (Pick One or More)
 
-| Provider | Why Use It | API Key Format | Base URL (if needed) |
-|----------|-----------|----------------|----------------------|
-| **OpenAI** | Most compatible, best structured output support | `sk-...` | Default (none needed) |
-| **Groq** | Very fast inference, cheap, OpenAI-compatible | `gsk_...` | `https://api.groq.com/openai/v1` |
-| **Local Model (Ollama/vLLM)** | Free, private, no rate limits | N/A | `http://localhost:11434/v1` or `http://localhost:8000/v1` |
-| **Any Other OpenAI-Compatible** | LiteLLM proxy, Azure, Together, etc. | Varies | Provider-specific |
+| Provider                        | Why Use It                                      | API Key Format | Base URL (if needed)                                      |
+| ------------------------------- | ----------------------------------------------- | -------------- | --------------------------------------------------------- |
+| **OpenAI**                      | Most compatible, best structured output support | `sk-...`       | Default (none needed)                                     |
+| **Groq**                        | Very fast inference, cheap, OpenAI-compatible   | `gsk_...`      | `https://api.groq.com/openai/v1`                          |
+| **Local Model (Ollama/vLLM)**   | Free, private, no rate limits                   | N/A            | `http://localhost:11434/v1` or `http://localhost:8000/v1` |
+| **Any Other OpenAI-Compatible** | LiteLLM proxy, Azure, Together, etc.            | Varies         | Provider-specific                                         |
 
 **Recommendation for demo:** Use **Groq** as primary (fast, cheap, good enough for structured output) and keep **OpenAI** as fallback for complex cases. Or just use **OpenAI** if you already have credits.
 
@@ -27,7 +27,7 @@
 ```env
 LANGFUSE_PUBLIC_KEY=pk-lf-...
 LANGFUSE_SECRET_KEY=sk-lf-...
-LANGFUSE_HOST=https://cloud.langfuse.com
+LANGFUSE_BASE_URL=https://cloud.langfuse.com
 ```
 
 **Option B: Self-Hosted Langfuse (via Docker Compose)**
@@ -42,7 +42,7 @@ docker-compose up -d langfuse
 ```env
 LANGFUSE_PUBLIC_KEY=pk-local-...
 LANGFUSE_SECRET_KEY=sk-local-...
-LANGFUSE_HOST=http://localhost:3000
+LANGFUSE_BASE_URL=http://localhost:3000
 ```
 
 ### 3. Database & Cache (Docker Compose)
@@ -77,7 +77,7 @@ LLM_FALLBACK_MODEL=gpt-4o-mini
 # === Langfuse ===
 LANGFUSE_PUBLIC_KEY=pk-lf-xxxxxxxx
 LANGFUSE_SECRET_KEY=sk-lf-xxxxxxxx
-LANGFUSE_HOST=https://cloud.langfuse.com
+LANGFUSE_BASE_URL=https://cloud.langfuse.com
 
 # === Database ===
 DATABASE_URL=postgresql+asyncpg://tracepilot:tracepilot@localhost:5432/tracepilot
@@ -229,26 +229,65 @@ python scripts/check_drift.py
 
 ### Manual Verification Steps
 
-| Feature | How to Verify | Expected Result |
-|---------|--------------|-----------------|
-| Screening API | POST `/api/v1/screenings` | Returns structured result with `trace_id` |
-| Langfuse Traces | Open Langfuse UI | Trace shows full pipeline: input → prompt → LLM → parse → output |
-| Fuzzer | POST `/api/v1/fuzzer/run` | Returns detection rates per lie type |
-| Fuzzer Badges | Check README | SVG badges show detection rates |
-| Validation Error Capture | POST invalid JSON | Error appears in Langfuse `adversarial-tests` dataset |
-| Canary | Run `scripts/canary_run.py` | Compares against baseline, exits 0 if no drift |
-| Drift Detection | Modify prompt, run canary | GitHub Action opens issue on drift (in CI) |
-| Retry Cascade | Temporarily break schema | System retries with temp=0, then template fallback |
+| Feature                  | How to Verify               | Expected Result                                                  |
+| ------------------------ | --------------------------- | ---------------------------------------------------------------- |
+| Screening API            | POST `/api/v1/screenings`   | Returns structured result with `trace_id`                        |
+| Langfuse Traces          | Open Langfuse UI            | Trace shows full pipeline: input → prompt → LLM → parse → output |
+| Fuzzer                   | POST `/api/v1/fuzzer/run`   | Returns detection rates per lie type                             |
+| Fuzzer Badges            | Check README                | SVG badges show detection rates                                  |
+| Validation Error Capture | POST invalid JSON           | Error appears in Langfuse `adversarial-tests` dataset            |
+| Canary                   | Run `scripts/canary_run.py` | Compares against baseline, exits 0 if no drift                   |
+| Drift Detection          | Modify prompt, run canary   | GitHub Action opens issue on drift (in CI)                       |
+| Retry Cascade            | Temporarily break schema    | System retries with temp=0, then template fallback               |
+
+### Frontend Pages
+
+| Page            | URL                                  | Description                                 |
+| --------------- | ------------------------------------ | ------------------------------------------- |
+| Admin Dashboard | `/admin/dashboard`                   | View hiring metrics, top candidates, funnel |
+| Jobs            | `/admin/jobs`                        | Create and close job openings               |
+| Applications    | `/admin/applications`                | Filter and update application status        |
+| Candidates      | `/admin/candidates`                  | View candidate list                         |
+| Compare         | `/admin/compare`                     | Compare candidates by screening IDs         |
+| Screenings      | `/screenings` or `/admin/screenings` | View all screenings or lookup by ID         |
+| Fuzzer          | `/fuzzer`                            | Run fuzzer and view detection results       |
+| HR              | `/hr`                                | Batch screening and HR dashboard            |
+| Tasks           | `/tasks`                             | Queue canary tasks and check task status    |
+
+### New API Endpoints
+
+| Method | Path                                   | Description                         |
+| ------ | -------------------------------------- | ----------------------------------- |
+| POST   | `/api/v1/admin/jobs`                   | Create job opening                  |
+| PUT    | `/api/v1/admin/jobs/{job_id}`          | Update job (status, fields)         |
+| GET    | `/api/v1/admin/analytics/dashboard`    | JSON analytics dashboard            |
+| POST   | `/api/v1/admin/compare`                | Compare candidates by screening IDs |
+| GET    | `/api/v1/admin/candidates`             | List candidates                     |
+| POST   | `/api/v1/admin/candidates/{id}/status` | Update application status           |
+| GET    | `/api/v1/admin/candidates/{id}`        | Get candidate detail                |
+| GET    | `/api/v1/screenings`                   | List recent screenings              |
+| GET    | `/api/v1/screenings/all`               | List all screenings                 |
+| GET    | `/api/v1/screenings/{id}/trace`        | Redirect to observability trace     |
+| POST   | `/api/v1/fuzzer/run`                   | Run fuzzer synchronously            |
+| POST   | `/api/v1/fuzzer/run-async`             | Queue fuzzer as Celery task         |
+| GET    | `/api/v1/fuzzer/runs/{run_id}`         | Get fuzzer run result               |
+| GET    | `/api/v1/fuzzer/badges`                | Get detection rate badges           |
+| POST   | `/api/v1/hr/batch`                     | Batch screen multiple resumes       |
+| GET    | `/api/v1/hr/dashboard`                 | HR screening dashboard metrics      |
+| POST   | `/api/v1/hr/compare`                   | Compare multiple screenings         |
+| GET    | `/api/v1/hr/reports/{screening_id}`    | HTML screening report               |
+| POST   | `/api/v1/tasks/canary`                 | Queue canary drift detection        |
+| GET    | `/api/v1/tasks/{task_id}`              | Get Celery task status              |
 
 ---
 
 ## Cost Estimates for Testing
 
-| Provider | Cost per Screening | Cost per Fuzzer Run (10 resumes) | Cost per Canary Run (20 candidates) | Free Tier |
-|----------|-------------------|-----------------------------------|-------------------------------------|-----------|
-| OpenAI GPT-4o-mini | ~$0.003 | ~$0.03 | ~$0.06 | $5-18 credit |
-| Groq Llama 3.1 70B | ~$0.0005 | ~$0.005 | ~$0.01 | $200/month free |
-| Ollama (local) | $0 | $0 | $0 | Unlimited |
+| Provider           | Cost per Screening | Cost per Fuzzer Run (10 resumes) | Cost per Canary Run (20 candidates) | Free Tier       |
+| ------------------ | ------------------ | -------------------------------- | ----------------------------------- | --------------- |
+| OpenAI GPT-4o-mini | ~$0.003            | ~$0.03                           | ~$0.06                              | $5-18 credit    |
+| Groq Llama 3.1 70B | ~$0.0005           | ~$0.005                          | ~$0.01                              | $200/month free |
+| Ollama (local)     | $0                 | $0                               | $0                                  | Unlimited       |
 
 **Recommendation:** Use **Groq** for development/testing (very cheap, fast) and **OpenAI** as fallback for complex cases. For CI/CD, consider **Ollama** (local) to avoid API costs entirely.
 
@@ -264,7 +303,7 @@ pip install -e .
 ```
 
 ### Langfuse traces not appearing
-1. Check `LANGFUSE_HOST` is correct (cloud vs local)
+1. Check `LANGFUSE_BASE_URL` is correct (cloud vs local)
 2. Verify API keys are valid
 3. Check Langfuse project ID matches
 4. Look for `langfuse.flush()` in code (traces may be buffered)

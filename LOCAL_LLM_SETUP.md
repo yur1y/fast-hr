@@ -19,7 +19,7 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 ```bash
 # Recommended: llama3.1 8B (fast, good structured output)
-ollama pull llama3.1:8b
+ollama pull llama3.1:4b
 
 # Alternative: llama3.1 70B (better quality, needs more GPU)
 # ollama pull llama3.1:70b
@@ -80,7 +80,7 @@ curl -X POST http://localhost:8000/api/v1/screenings \
 
 | Model | Size | Speed | Quality | VRAM Required |
 |-------|------|-------|---------|---------------|
-| **llama3.1:8b** | 8B | Fast | Good | 6-8 GB |
+| **llama3.1:b** | 8B | Fast | Good | 6-8 GB |
 | llama3.1:70b | 70B | Slow | Excellent | 40-48 GB |
 | mistral:7b | 7B | Fast | Good | 6-8 GB |
 | qwen2.5:7b | 7B | Fast | Good | 6-8 GB |
@@ -155,7 +155,7 @@ Default credentials (from `.env`):
 OLLAMA_NUM_PARALLEL=4 ollama serve
 
 # Use smaller model for CPU
-ollama pull llama3.1:8b
+ollama pull llama3.1:4b
 ```
 
 ### GPU Acceleration
@@ -176,7 +176,7 @@ nvidia-smi
 OLLAMA_MAX_LOADED_MODELS=1 ollama serve
 
 # Use quantized model (smaller, faster)
-ollama pull llama3.1:8b-q4_0
+ollama pull llama3.1:4b-q4_0
 ```
 
 ---
@@ -213,7 +213,7 @@ ollama ps
 # Should show GPU usage, not just CPU
 
 # Use smaller model
-ollama pull llama3.1:8b
+ollama pull llama3.1:4b
 ```
 
 ### Langfuse connection errors
@@ -223,7 +223,7 @@ ollama pull llama3.1:8b
 curl http://localhost:3000/api/public/health
 
 # Or disable Langfuse for testing
-# Set LANGFUSE_HOST to empty in .env
+# Set LANGFUSE_BASE_URL to empty in .env
 ```
 
 ---
