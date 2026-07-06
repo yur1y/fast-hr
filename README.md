@@ -216,6 +216,85 @@ See `.env.example` for full list.
 
 ---
 
+## Data Privacy TODO
+
+- [ ] Define redaction rules for PII before LLM calls (`name`, `email`, `phone`, `address`)
+- [ ] Add opt-in consent flag on candidate submission for AI processing
+- [ ] Mask or hash candidate identifiers in Langfuse traces
+- [ ] Restrict prompt payload to job-relevant fields only (exclude salary, photo, DOB)
+- [ ] Add data retention / auto-delete policy for stored resumes and screenings
+- [ ] Log AI data-processing purpose and lawful basis per GDPR Art. 5/6
+- [ ] Ensure third-party model providers receive pseudonymized payloads
+- [ ] Add right-to-erasure endpoint for candidate deletion
+
+---
+
+## Roadmap & TODO
+
+### Core Screening Pipeline
+- [ ] Refactor single-shot LLM scoring into a LangGraph multi-node pipeline (parse → fact-extract → cross-verify → score → self-critique)
+- [ ] Add PII redaction layer before sending resume data to LLM/Langfuse
+- [ ] Replace free-text JSON parsing with structured outputs (Pydantic + tool calling)
+- [ ] Add output validation/guardrails with automatic retry on schema violation
+- [ ] Introduce self-consistency scoring (N samples + aggregation) as an optional mode
+- [ ] Build an eval harness (golden dataset) that runs in CI, not just canary-in-prod
+- [ ] Add semantic caching for repeated resume/JD pairs
+- [ ] Add RAG layer for job requirement matching instead of raw JD-in-prompt
+
+### Agentic Workflows & LangChain Integration
+- [ ] Build a LangGraph agent for multi-step resume analysis with tool calling (web search for company verification, calendar check for date validation)
+- [ ] Add MCP (Model Context Protocol) server exposing screening tools as resources for external agents
+- [ ] Implement agentic orchestration: screening agent → fact-check agent → scoring agent → critique agent, with LangGraph state management
+- [ ] Add tool-calling capabilities for LLM to verify companies (DuckDuckGo/Brave search), validate degrees (university APIs), and check employment dates (LinkedIn proxy)
+- [ ] Build a CrewAI-style multi-agent crew: Researcher (verifies facts), Analyst (extracts skills), Scorer (calculates fit), Critic (reviews for bias)
+- [ ] Add A2A (Agent-to-Agent) protocol support for inter-agent communication between screening and HR scheduling agents
+- [ ] Implement prompt chains with conditional branching: if confidence < 0.7 → escalate to human-in-the-loop review node
+- [ ] Add function calling for structured extraction: `extract_experience`, `extract_education`, `verify_company` as discrete tools
+- [ ] Build a LangGraph checkpointing system for long-running screening workflows with resume + multiple job descriptions
+- [ ] Add agent guardrails: input validation, output schema enforcement, rate limiting, and cost-budget caps per screening session
+- [ ] Implement RAG pipeline with vector store (Pinecone/Weaviate) for job description semantic matching and historical screening context retrieval
+- [ ] Add LLM-as-a-judge pattern for automated evaluation of screening quality against human-labeled golden set
+- [ ] Build prompt versioning and A/B testing framework using Langfuse datasets for systematic prompt engineering
+
+### Advanced Retrieval (Multi-Vector & Late Interaction)
+- [ ] Benchmark single-vector vs multi-vector retrieval for resume↔JD matching (precision@k on the golden dataset)
+- [ ] Add ColBERT-style late interaction: token-level embeddings + MaxSim scoring for fine-grained skill/requirement alignment
+- [ ] Add ColPali visual retrieval for PDF resumes — index pages as images and search tables, charts, and non-standard layouts without OCR
+- [ ] Build a multi-stage retrieval pipeline: fast single-vector recall → late-interaction rerank → LLM verification/scoring
+- [ ] Evaluate MUVERA to serve multi-vector retrieval on existing single-vector index infrastructure
+- [ ] Add embedding quantization (int8/binary) and token pooling to shrink index size and p95 latency
+- [ ] Measure and document retrieval quality vs latency vs infra cost per configuration; track results in Langfuse
+
+### Observability & Production Hardening
+- [ ] Add CI badge, test coverage badge, and architecture diagram to README
+- [ ] Fix leftover placeholder repo path (`your-username/tracepilot`) in README
+- [ ] Add authentication/authorization for HR admin endpoints (JWT or OAuth2)
+- [ ] Instrument features with metrics (detection rate, latency, cost per screening) and build a product analytics dashboard
+- [ ] Add webhook support for screening completion events (Slack, email, ATS integrations)
+- [ ] Build async pipeline on GCP Cloud Run / GKE with Pub/Sub for batch processing at scale
+- [ ] Add BigQuery sink for screening analytics and trend analysis across time
+- [ ] Implement model drift alerting with PagerDuty/Slack integration when canary scores deviate > 10%
+- [ ] Add cost tracking per LLM provider (Groq, OpenAI, Anthropic) with budget alerts
+- [ ] Build a feature-flag system for A/B testing prompt versions and model providers in production
+
+### Frontend & UX
+- [ ] Add React pages for AdminJobs and AdminApplications (routes exist but components missing)
+- [ ] Build a screening comparison view for side-by-side candidate evaluation
+- [ ] Add real-time fuzzer run progress with WebSocket or SSE
+- [ ] Implement candidate search and filtering in the HR portal
+- [ ] Add resume upload (PDF/DOCX) with drag-and-drop in the frontend
+- [ ] Build a trace viewer embedded in the UI (iframe Langfuse trace or custom visualization)
+
+### Infrastructure & DevOps
+- [ ] Add Terraform / Pulumi for GCP infrastructure as code (Cloud Run, Cloud SQL, Redis, BigQuery)
+- [ ] Implement blue-green deployment with canary traffic splitting for safe model updates
+- [ ] Add database migration automation with Alembic in CI/CD
+- [ ] Build a staging environment that mirrors production with anonymized data
+- [ ] Add load testing with Locust or k6 for screening API throughput validation
+- [ ] Implement circuit breaker pattern for LLM provider failover (Groq → OpenAI → Anthropic)
+
+---
+
 ## License
 
 MIT

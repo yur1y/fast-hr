@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api } from '../lib/api'
-import { Users, Briefcase, TrendingUp } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Users, Briefcase, TrendingUp, Plus } from 'lucide-react'
 
 export function AdminDashboard() {
   const [data, setData] = useState<any>(null)
@@ -52,6 +53,16 @@ export function AdminDashboard() {
           </div>
         </div>
       ) : null}
+
+      <section className="card">
+        <div className="card-body flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="section-title">Job openings</h2>
+            <p className="mt-1 text-xs text-slate-600">Create and manage job postings.</p>
+          </div>
+          <Link to="/admin/jobs" className="btn-primary"><Plus className="h-4 w-4" /> Add new job</Link>
+        </div>
+      </section>
     </div>
   )
 }

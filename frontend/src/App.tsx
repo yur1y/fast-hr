@@ -36,7 +36,7 @@ export function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
       <header className="border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <NavLink to="/" className="flex items-center gap-2 text-lg font-semibold text-brand-700">
@@ -72,12 +72,15 @@ export function App() {
               <span className="flex items-center gap-1.5"><ClipboardList className="h-4 w-4" /> HR</span>
             </NavLink>
              <div className="h-4 w-px bg-slate-200" />
-             <NavLink to="/admin/applications" className={navLinkClass}>
-               <span className="flex items-center gap-1.5"><Users className="h-4 w-4" /> Applications</span>
-             </NavLink>
-             <NavLink to="/admin" className={navLinkClass}>
-               <span className="flex items-center gap-1.5"><UserSquare2 className="h-4 w-4" /> Admin</span>
-             </NavLink>
+              <NavLink to="/admin/applications" className={navLinkClass}>
+                <span className="flex items-center gap-1.5"><Users className="h-4 w-4" /> Applications</span>
+              </NavLink>
+              <NavLink to="/admin/jobs" className={navLinkClass}>
+                <span className="flex items-center gap-1.5"><Briefcase className="h-4 w-4" /> Jobs</span>
+              </NavLink>
+              <NavLink to="/admin" className={navLinkClass}>
+                <span className="flex items-center gap-1.5"><UserSquare2 className="h-4 w-4" /> Admin</span>
+              </NavLink>
           </nav>
         </div>
 
@@ -102,17 +105,20 @@ export function App() {
               <span className="flex items-center gap-1.5"><ClipboardList className="h-4 w-4" /> HR</span>
             </NavLink>
              <div className="h-px bg-slate-200" />
-             <NavLink to="/admin/applications" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-               <span className="flex items-center gap-1.5"><Users className="h-4 w-4" /> Applications</span>
-             </NavLink>
-             <NavLink to="/admin" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-               <span className="flex items-center gap-1.5"><UserSquare2 className="h-4 w-4" /> Admin</span>
-             </NavLink>
+              <NavLink to="/admin/applications" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
+                <span className="flex items-center gap-1.5"><Users className="h-4 w-4" /> Applications</span>
+              </NavLink>
+              <NavLink to="/admin/jobs" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
+                <span className="flex items-center gap-1.5"><Briefcase className="h-4 w-4" /> Jobs</span>
+              </NavLink>
+              <NavLink to="/admin" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
+                <span className="flex items-center gap-1.5"><UserSquare2 className="h-4 w-4" /> Admin</span>
+              </NavLink>
           </nav>
         )}
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main className="mx-auto max-w-6xl px-4 py-8 flex-1">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/batch" element={<Batch />} />
